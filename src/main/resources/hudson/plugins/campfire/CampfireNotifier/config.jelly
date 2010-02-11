@@ -1,0 +1,15 @@
+<j:jelly xmlns:j="jelly:core" xmlns:st="jelly:stapler" xmlns:d="jelly:define" xmlns:l="/lib/layout" xmlns:t="/lib/hudson" xmlns:f="/lib/form">
+  <!--
+    This jelly script is used for per-project configuration.
+    See global.jelly for a general discussion about jelly script.
+  -->
+    <!--<f:entry title="Hostname" description="Hostname of the Campfire server">-->
+      <!--http://<f:textbox name="subdomain" value="${descriptor.getSubdomain()}" />.campfirenow.com-->
+    <!--</f:entry>-->
+    <!--<f:entry title="Token" description="The authentication token of the bot">-->
+      <!--<f:password name="token" value="${descriptor.getToken()}" />-->
+    <!--</f:entry>-->
+    <!--<f:entry title="Room" description="Room the bot should join">-->
+      <!--<f:textbox name="room" value="${descriptor.getRoom()}" />-->
+    <!--</f:entry>-->
+</j:jelly>
