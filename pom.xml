@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+  <parent>
+    <groupId>org.jvnet.hudson.plugins</groupId>
+    <artifactId>plugin</artifactId>
+    <version>1.319</version>
+    <relativePath>../pom.xml</relativePath>
+  </parent>
+  <groupId>org.jvnet.hudson.plugins</groupId>
+  <artifactId>campfire</artifactId>
+  <packaging>hpi</packaging>
+  <version>1.2-SNAPSHOT-JGP</version>
+  <name>Hudson Campfire Plugin</name>
+  <description>A Build status publisher that notifies channels on a Campfire server</description>
+  <url>http://wiki.hudson-ci.org/display/HUDSON/Campfire+Plugin</url>
+  <licenses>
+  	<license><name>MIT license</name><comments>All source code is under the MIT license.</comments></license>
+  </licenses>
+  <dependencies>
+    <dependency>
+      <groupId>org.jvnet.hudson.main</groupId>
+      <artifactId>maven-plugin</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>commons-httpclient</groupId>
+      <artifactId>commons-httpclient</artifactId>
+      <version>3.1-rc1</version>
+    </dependency>
+      <dependency>
+        <groupId>org.jvnet.hudson</groupId>
+        <artifactId>htmlunit</artifactId>
+        <version>2.2-hudson-10</version>
+      </dependency>
+  </dependencies>
+  <developers>
+    <developer>
+      <id>jenslukowski</id>
+      <name>Jens Lukowski</name>
+      <email>jens.lukowski@softwareschneiderei.de</email>
+      <organization>Softwareschneiderei GmbH</organization>
+      <organizationUrl>http://www.softwareschneiderei.de</organizationUrl>
+    </developer>
+  </developers>
+</project>

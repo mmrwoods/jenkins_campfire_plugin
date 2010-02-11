@@ -25,14 +25,6 @@ public class Room {
         return this.id;
     }
 
-    public void join() throws IOException {
-        campfire.post("room/" + id + "/join.xml", "");
-    }
-
-    public void leave() throws IOException {
-        campfire.post("room/" + id + "/leave.xml", "");
-    }
-
     public void speak(String message) throws IOException {
         campfire.post("room/" + id + "/speak.xml", "<message><type>TextMessage</type><body>" + message + "</body></message>");
     }
