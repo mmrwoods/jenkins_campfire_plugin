@@ -14,9 +14,9 @@ import javax.xml.xpath.XPathExpressionException;
 
 public class CampfireNotifier extends Notifier {
 
-	private transient Campfire campfire;
+    private transient Campfire campfire;
     private Room room;
-	private String hudsonUrl;
+    private String hudsonUrl;
 
     /**
      * Descriptor should be singleton. (Won't this just set a class constant to an instance (but not the only possible instance) of DescriptorImpl?)
@@ -24,14 +24,14 @@ public class CampfireNotifier extends Notifier {
     @Extension
     public static final DescriptorImpl DESCRIPTOR = new DescriptorImpl();
 
-	public CampfireNotifier() throws IOException {
-	    super();
-		initialize();
-	}
-
-	public CampfireNotifier(String subdomain, String token, String room, String hudsonUrl) throws IOException {
+    public CampfireNotifier() throws IOException {
         super();
-		initialize(subdomain, token, room, hudsonUrl);
+        initialize();
+    }
+
+    public CampfireNotifier(String subdomain, String token, String room, String hudsonUrl) throws IOException {
+        super();
+        initialize(subdomain, token, room, hudsonUrl);
     }
 
     public BuildStepMonitor getRequiredMonitorService() {
@@ -39,39 +39,39 @@ public class CampfireNotifier extends Notifier {
     }
 
     private void publish(AbstractBuild<?, ?> build) throws IOException {
-		checkCampfireConnection();
-		String message = build.getProject().getName() + " " + build.getDisplayName() + ": " + build.getResult().toString();
-		// possible TODO: get most recent committer from log or even just show all using build.getCulprits()
-		if (hudsonUrl != null && hudsonUrl.length() > 1) {
-			message = message + " (" + hudsonUrl + build.getUrl() + ")";
-		}
-		room.speak(message);
+        checkCampfireConnection();
+        String message = build.getProject().getName() + " " + build.getDisplayName() + ": " + build.getResult().toString();
+        // possible TODO: get most recent committer from log or even just show all using build.getCulprits()
+        if (hudsonUrl != null && hudsonUrl.length() > 1) {
+            message = message + " (" + hudsonUrl + build.getUrl() + ")";
+        }
+        room.speak(message);
     }
 
-	private void checkCampfireConnection() throws IOException {
-	    if (campfire == null) {
-	        initialize();
-	    }
-	}
+    private void checkCampfireConnection() throws IOException {
+        if (campfire == null) {
+            initialize();
+        }
+    }
 
     private void initialize() throws IOException {
-		initialize(DESCRIPTOR.getSubdomain(), DESCRIPTOR.getToken(), DESCRIPTOR.getRoom(), DESCRIPTOR.getHudsonUrl());
+        initialize(DESCRIPTOR.getSubdomain(), DESCRIPTOR.getToken(), DESCRIPTOR.getRoom(), DESCRIPTOR.getHudsonUrl());
     }
 
     private void initialize(String subdomain, String token, String room, String hudsonUrl) throws IOException {
-		campfire = new Campfire(subdomain, token);
-	    try {
-			this.room = campfire.findOrCreateRoomByName(room);
-	    } catch (IOException e) {
-	        throw new IOException("Cannot join room: " + e.getMessage());
-	    } catch (ParserConfigurationException e) {
-	        throw new IOException("Cannot join room: " + e.getMessage());
-	    } catch (XPathExpressionException e) {
-	        throw new IOException("Cannot join room: " + e.getMessage());
-	    } catch (SAXException e) {
-	        throw new IOException("Cannot join room: " + e.getMessage());
-	    }
-		this.hudsonUrl = hudsonUrl;
+        campfire = new Campfire(subdomain, token);
+        try {
+            this.room = campfire.findOrCreateRoomByName(room);
+        } catch (IOException e) {
+            throw new IOException("Cannot join room: " + e.getMessage());
+        } catch (ParserConfigurationException e) {
+            throw new IOException("Cannot join room: " + e.getMessage());
+        } catch (XPathExpressionException e) {
+            throw new IOException("Cannot join room: " + e.getMessage());
+        } catch (SAXException e) {
+            throw new IOException("Cannot join room: " + e.getMessage());
+        }
+        this.hudsonUrl = hudsonUrl;
     }
 
     @Override

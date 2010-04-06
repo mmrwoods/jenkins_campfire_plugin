@@ -41,5 +41,12 @@
       <organization>Softwareschneiderei GmbH</organization>
       <organizationUrl>http://www.softwareschneiderei.de</organizationUrl>
     </developer>
+    <developer>
+      <id>thickpaddy</id>
+      <name>Mark Woods</name>
+      <email>mark dot woods at jgp</email>
+      <organization>Jobsgopublic</organization>
+      <organizationUrl>http://www.jgp.co.uk</organizationUrl>
+    </developer>
   </developers>
 </project>

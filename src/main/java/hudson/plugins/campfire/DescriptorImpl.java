@@ -18,7 +18,7 @@ public class DescriptorImpl extends BuildStepDescriptor<Publisher> {
     private String subdomain;
     private String token;
     private String room;
-	private String hudsonUrl;
+    private String hudsonUrl;
 
     public DescriptorImpl() {
         super(CampfireNotifier.class);
@@ -41,9 +41,9 @@ public class DescriptorImpl extends BuildStepDescriptor<Publisher> {
         return room;
     }
 
-	public String getHudsonUrl() {
-		return hudsonUrl;
-	}
+    public String getHudsonUrl() {
+        return hudsonUrl;
+    }
 
     public boolean isApplicable(Class<? extends AbstractProject> aClass) {
         return true;
@@ -54,24 +54,24 @@ public class DescriptorImpl extends BuildStepDescriptor<Publisher> {
      */
     @Override
     public Publisher newInstance(StaplerRequest req, JSONObject formData) throws FormException {
-		try {
-			return new CampfireNotifier(subdomain, token, room, hudsonUrl);
-		} catch (Exception e) {
-			throw new FormException("Failed to initialize campfire notifier - check your global campfire notifier configuration settings", e, "");
-		}
+        try {
+            return new CampfireNotifier(subdomain, token, room, hudsonUrl);
+        } catch (Exception e) {
+            throw new FormException("Failed to initialize campfire notifier - check your global campfire notifier configuration settings", e, "");
+        }
     }
 
     @Override
     public boolean configure(StaplerRequest req, JSONObject json) throws FormException {
-		subdomain = req.getParameter("campfireSubdomain");
-		token = req.getParameter("campfireToken");
-		room = req.getParameter("campfireRoom");
-		hudsonUrl = req.getParameter("campfireHudsonUrl");	
-		if ( hudsonUrl != null && !hudsonUrl.endsWith("/") ) {
-			hudsonUrl = hudsonUrl + "/";
-		}
-		save();
-		return super.configure(req, json);
+        subdomain = req.getParameter("campfireSubdomain");
+        token = req.getParameter("campfireToken");
+        room = req.getParameter("campfireRoom");
+        hudsonUrl = req.getParameter("campfireHudsonUrl");	
+        if ( hudsonUrl != null && !hudsonUrl.endsWith("/") ) {
+            hudsonUrl = hudsonUrl + "/";
+        }
+        save();
+        return super.configure(req, json);
     }
 
     /**
