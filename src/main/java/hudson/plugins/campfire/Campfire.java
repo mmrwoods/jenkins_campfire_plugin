@@ -46,14 +46,16 @@ public class Campfire {
     }
 
     protected String getHost() {
-      if (this.ssl) {
-        return "https://" + this.subdomain + ".campfirenow.com";
-      }
-      return "http://" + this.subdomain + ".campfirenow.com";
+      return this.subdomain + ".campfirenow.com";
+    }
+
+    protected String getProtocol() {
+      if (this.ssl) { return "https://"; }
+      return "http://";
     }
 
     public int post(String url, String body) throws IOException {
-        PostMethod post = new PostMethod(getHost() + "/" + url);
+        PostMethod post = new PostMethod(getProtocol() + getHost() + "/" + url);
         post.setRequestHeader("Content-Type", "application/xml");
         post.setRequestEntity(new StringRequestEntity(body, "application/xml", "UTF8"));
         try {
@@ -64,7 +66,7 @@ public class Campfire {
     }
 
     public XmlPage get(String url) throws IOException {
-        return (XmlPage) webClient.getPage(getHost() + "/" + url);
+        return (XmlPage) webClient.getPage(getProtocol() + getHost() + "/" + url);
     }
 
     public boolean verify(int returnCode) {
