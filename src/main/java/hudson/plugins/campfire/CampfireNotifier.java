@@ -29,9 +29,9 @@ public class CampfireNotifier extends Notifier {
         initialize();
     }
 
-    public CampfireNotifier(String subdomain, String token, String room, String hudsonUrl) throws IOException {
+    public CampfireNotifier(String subdomain, String token, String room, String hudsonUrl, boolean ssl) throws IOException {
         super();
-        initialize(subdomain, token, room, hudsonUrl);
+        initialize(subdomain, token, room, hudsonUrl, ssl);
     }
 
     public BuildStepMonitor getRequiredMonitorService() {
@@ -55,11 +55,11 @@ public class CampfireNotifier extends Notifier {
     }
 
     private void initialize() throws IOException {
-        initialize(DESCRIPTOR.getSubdomain(), DESCRIPTOR.getToken(), DESCRIPTOR.getRoom(), DESCRIPTOR.getHudsonUrl());
+        initialize(DESCRIPTOR.getSubdomain(), DESCRIPTOR.getToken(), DESCRIPTOR.getRoom(), DESCRIPTOR.getHudsonUrl(), DESCRIPTOR.getSsl());
     }
 
-    private void initialize(String subdomain, String token, String room, String hudsonUrl) throws IOException {
-        campfire = new Campfire(subdomain, token);
+    private void initialize(String subdomain, String token, String room, String hudsonUrl, boolean ssl) throws IOException {
+        campfire = new Campfire(subdomain, token, ssl);
         try {
             this.room = campfire.findOrCreateRoomByName(room);
         } catch (IOException e) {

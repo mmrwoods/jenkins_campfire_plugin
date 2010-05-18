@@ -27,14 +27,16 @@ public class Campfire {
     private WebClient webClient;
     private String subdomain;
     private String token;
+    private boolean ssl;
 
-    public Campfire(String subdomain, String token) {
+    public Campfire(String subdomain, String token, boolean ssl) {
         super();
         this.subdomain = subdomain;
         this.token = token;
+        this.ssl = ssl;
         client = new HttpClient();
         Credentials defaultcreds = new UsernamePasswordCredentials(token, "x");
-        client.getState().setCredentials(new AuthScope(getHost(), 80, AuthScope.ANY_REALM), defaultcreds);
+        client.getState().setCredentials(new AuthScope(getHost(), -1, AuthScope.ANY_REALM), defaultcreds);
         client.getParams().setAuthenticationPreemptive(true);
         client.getParams().setParameter("http.useragent", "JTinder");
         webClient = new WebClient();
@@ -44,11 +46,14 @@ public class Campfire {
     }
 
     protected String getHost() {
-        return this.subdomain + ".campfirenow.com";
+      if (this.ssl) {
+        return "https://" + this.subdomain + ".campfirenow.com";
+      }
+      return "http://" + this.subdomain + ".campfirenow.com";
     }
 
     public int post(String url, String body) throws IOException {
-        PostMethod post = new PostMethod("http://" + getHost() + "/" + url);
+        PostMethod post = new PostMethod(getHost() + "/" + url);
         post.setRequestHeader("Content-Type", "application/xml");
         post.setRequestEntity(new StringRequestEntity(body, "application/xml", "UTF8"));
         try {
@@ -59,7 +64,7 @@ public class Campfire {
     }
 
     public XmlPage get(String url) throws IOException {
-        return (XmlPage) webClient.getPage("http://" + getHost() + "/" + url);
+        return (XmlPage) webClient.getPage(getHost() + "/" + url);
     }
 
     public boolean verify(int returnCode) {

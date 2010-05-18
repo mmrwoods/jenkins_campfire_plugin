@@ -12,4 +12,7 @@
     <!--<f:entry title="Room" description="Room the bot should join">-->
       <!--<f:textbox name="room" value="${descriptor.getRoom()}" />-->
     <!--</f:entry>-->
+    <!--<f:entry title="SSL" description="Use SSL?">-->
+      <!--<f:textbox name="ssl" value="${descriptor.getSsl()}" />-->
+    <!--</f:entry>-->
 </j:jelly>

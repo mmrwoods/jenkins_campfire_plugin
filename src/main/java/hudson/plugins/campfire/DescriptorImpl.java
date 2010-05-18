@@ -19,6 +19,7 @@ public class DescriptorImpl extends BuildStepDescriptor<Publisher> {
     private String token;
     private String room;
     private String hudsonUrl;
+    private boolean ssl;
 
     public DescriptorImpl() {
         super(CampfireNotifier.class);
@@ -45,6 +46,10 @@ public class DescriptorImpl extends BuildStepDescriptor<Publisher> {
         return hudsonUrl;
     }
 
+    public boolean getSsl() {
+        return ssl;
+    }
+
     public boolean isApplicable(Class<? extends AbstractProject> aClass) {
         return true;
     }
@@ -55,7 +60,7 @@ public class DescriptorImpl extends BuildStepDescriptor<Publisher> {
     @Override
     public Publisher newInstance(StaplerRequest req, JSONObject formData) throws FormException {
         try {
-            return new CampfireNotifier(subdomain, token, room, hudsonUrl);
+            return new CampfireNotifier(subdomain, token, room, hudsonUrl, ssl);
         } catch (Exception e) {
             throw new FormException("Failed to initialize campfire notifier - check your global campfire notifier configuration settings", e, "");
         }
@@ -66,10 +71,11 @@ public class DescriptorImpl extends BuildStepDescriptor<Publisher> {
         subdomain = req.getParameter("campfireSubdomain");
         token = req.getParameter("campfireToken");
         room = req.getParameter("campfireRoom");
-        hudsonUrl = req.getParameter("campfireHudsonUrl");	
+        hudsonUrl = req.getParameter("campfireHudsonUrl");
         if ( hudsonUrl != null && !hudsonUrl.endsWith("/") ) {
             hudsonUrl = hudsonUrl + "/";
         }
+        ssl = req.getParameter("campfireSsl") != null;
         save();
         return super.configure(req, json);
     }

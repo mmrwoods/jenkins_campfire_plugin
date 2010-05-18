@@ -23,6 +23,9 @@
     </f:entry>
     <f:entry title="Hudson Url" help="${rootURL}/plugin/campfire/help-globalConfig-hudsonUrl.html">
         <f:textbox name="campfireHudsonUrl" value="${descriptor.getHudsonUrl()}" />
-    </f:entry>	
+    </f:entry>
+    <f:entry title="SSL" help="${rootURL}/plugin/campfire/help-globalConfig-ssl.html">
+        <f:checkbox name="campfireSsl" checked="${descriptor.getSsl()}" />
+    </f:entry>
   </f:section>
 </j:jelly>
