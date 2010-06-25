@@ -10,6 +10,8 @@ Development of the original plugin seemed to stall, so I forked it to address a 
 * Tidied up jelly view for configuration form and added help files for each field.
 * Added a link to the build in notifications sent to campfire.
 
+Thanks to Joshua Krall, we now have support for SSL, and the plugin works after upgrading to Hudson ver. 1.363
+
 Note: I don't have a lot of Java experience, so my code is probably pretty shoddy, but we've been using it for months without any trouble.
 
 ### Installation 

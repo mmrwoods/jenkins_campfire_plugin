@@ -48,5 +48,9 @@
       <organization>Jobsgopublic</organization>
       <organizationUrl>http://www.jgp.co.uk</organizationUrl>
     </developer>
+    <developer>
+      <id>jkrall</id>
+      <name>Joshua Krall</name>
+    </developer>
   </developers>
 </project>
