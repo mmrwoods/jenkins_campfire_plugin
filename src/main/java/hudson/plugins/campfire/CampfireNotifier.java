@@ -61,7 +61,10 @@ public class CampfireNotifier extends Notifier {
     private void initialize(String subdomain, String token, String room, String hudsonUrl, boolean ssl) throws IOException {
         campfire = new Campfire(subdomain, token, ssl);
         try {
-            this.room = campfire.findOrCreateRoomByName(room);
+            this.room = campfire.findRoomByName(room);
+            if ( this.room == null ) {
+              throw new IOException("Room '" + room + "' not found");
+            }
         } catch (IOException e) {
             throw new IOException("Cannot join room: " + e.getMessage());
         } catch (ParserConfigurationException e) {

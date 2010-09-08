@@ -76,6 +76,11 @@ public class DescriptorImpl extends BuildStepDescriptor<Publisher> {
             hudsonUrl = hudsonUrl + "/";
         }
         ssl = req.getParameter("campfireSsl") != null;
+        try {
+            new CampfireNotifier(subdomain, token, room, hudsonUrl, ssl);
+        } catch (Exception e) {
+            throw new FormException("Failed to initialize campfire notifier - check your global campfire notifier configuration settings", e, "");
+        }
         save();
         return super.configure(req, json);
     }

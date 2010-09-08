@@ -112,7 +112,7 @@ public class Campfire {
         return rooms;
     }
 
-    private Room findRoomByName(String name) throws IOException, ParserConfigurationException, XPathExpressionException, SAXException {
+    public Room findRoomByName(String name) throws IOException, ParserConfigurationException, XPathExpressionException, SAXException {
         for (Room room : getRooms()) {
             if (room.getName().equals(name)) {
                 return room;
