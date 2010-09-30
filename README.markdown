@@ -22,7 +22,7 @@ You'll need to have JDK 6 and maven2 installed to build the plugin. On OSX with 
 
 Then clone the repository and build the package
 
-    git clone git@github.com:jgp/hudson_campfire_plugin.git
+    git clone http://github.com/jgp/hudson_campfire_plugin.git
     cd hudson_campfire_plugin
     mvn package
 
