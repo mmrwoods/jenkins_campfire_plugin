@@ -27,5 +27,8 @@
     <f:entry title="SSL" help="${rootURL}/plugin/campfire/help-globalConfig-ssl.html">
         <f:checkbox name="campfireSsl" checked="${descriptor.getSsl()}" />
     </f:entry>
+    <f:entry title="Enable Smart Notification" help="${rootURL}/plugin/campfire/help-globalConfig-smartNotify.html">
+        <f:checkbox name="campfireSmartNotify" checked="${descriptor.getSmartNotify()}" />
+    </f:entry>
   </f:section>
 </j:jelly>

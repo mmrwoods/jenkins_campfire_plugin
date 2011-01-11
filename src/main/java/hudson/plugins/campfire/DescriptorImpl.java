@@ -20,6 +20,7 @@ public class DescriptorImpl extends BuildStepDescriptor<Publisher> {
     private String room;
     private String hudsonUrl;
     private boolean ssl;
+    private boolean smartNotify;
 
     public DescriptorImpl() {
         super(CampfireNotifier.class);
@@ -49,6 +50,10 @@ public class DescriptorImpl extends BuildStepDescriptor<Publisher> {
     public boolean getSsl() {
         return ssl;
     }
+    
+    public boolean getSmartNotify() {
+        return smartNotify;
+    }
 
     public boolean isApplicable(Class<? extends AbstractProject> aClass) {
         return true;
@@ -76,6 +81,7 @@ public class DescriptorImpl extends BuildStepDescriptor<Publisher> {
             hudsonUrl = hudsonUrl + "/";
         }
         ssl = req.getParameter("campfireSsl") != null;
+        smartNotify = req.getParameter("campfireSmartNotify") != null;
         try {
             new CampfireNotifier(subdomain, token, room, hudsonUrl, ssl);
         } catch (Exception e) {

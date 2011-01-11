@@ -6,6 +6,7 @@ import hudson.Extension;
 import hudson.Launcher;
 import hudson.model.AbstractBuild;
 import hudson.model.BuildListener;
+import hudson.model.Result;
 
 import java.io.IOException;
 import org.xml.sax.SAXException;
@@ -17,6 +18,7 @@ public class CampfireNotifier extends Notifier {
     private transient Campfire campfire;
     private Room room;
     private String hudsonUrl;
+    private boolean smartNotify;
 
     /**
      * Descriptor should be singleton. (Won't this just set a class constant to an instance (but not the only possible instance) of DescriptorImpl?)
@@ -80,7 +82,21 @@ public class CampfireNotifier extends Notifier {
     @Override
     public boolean perform(AbstractBuild<?, ?> build, Launcher launcher,
             BuildListener listener) throws InterruptedException, IOException {
-        publish(build);
+        // If SmartNotify is enabled, only notify if:
+        //  (1) there was no previous build, or
+        //  (2) if there was a failure, or
+        //  (3) if previous build failed and the current build succeeded.
+        if (DESCRIPTOR.getSmartNotify()) {
+            AbstractBuild previousBuild = build.getPreviousBuild();
+            if (previousBuild == null ||
+                build.getResult() != Result.SUCCESS ||
+                previousBuild.getResult() != Result.SUCCESS)
+            {
+                publish(build);
+            }
+        } else {
+            publish(build);
+        }
         return true;
     }
 }
