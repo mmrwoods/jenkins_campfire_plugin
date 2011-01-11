@@ -10,7 +10,7 @@
   <groupId>org.jvnet.hudson.plugins</groupId>
   <artifactId>campfire</artifactId>
   <packaging>hpi</packaging>
-  <version>2.2-SNAPSHOT-JGP</version>
+  <version>2.21-bgreenlee</version>
   <name>Hudson Campfire Plugin</name>
   <description>A Build status publisher that notifies channels on a Campfire server</description>
   <url>http://wiki.hudson-ci.org/display/HUDSON/Campfire+Plugin</url>
