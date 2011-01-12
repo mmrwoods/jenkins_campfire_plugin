@@ -7,6 +7,8 @@ import hudson.Launcher;
 import hudson.model.AbstractBuild;
 import hudson.model.BuildListener;
 import hudson.model.Result;
+import hudson.model.User;
+import hudson.scm.ChangeLogSet;
 
 import java.io.IOException;
 import org.xml.sax.SAXException;
@@ -42,12 +44,24 @@ public class CampfireNotifier extends Notifier {
 
     private void publish(AbstractBuild<?, ?> build) throws IOException {
         checkCampfireConnection();
+        String changeString = "No changes";
+        if (!build.hasChangeSetComputed()) {
+          changeString = "Changes not determined";
+        } else if (build.getChangeSet().iterator().hasNext()) {
+          ChangeLogSet.Entry entry = build.getChangeSet().iterator().next();
+          String commitMsg = entry.getMsg().trim();
+          if (commitMsg != "") {
+            if (commitMsg.length() > 47) {
+              commitMsg = commitMsg.substring(0, 46)  + "...";
+            }
+            changeString = commitMsg + " - " + entry.getAuthor().toString();
+          }
+        }
         String resultString = build.getResult().toString();
-        if ( !DESCRIPTOR.getSmartNotify() && build.getResult() == Result.SUCCESS ) resultString = resultString.toLowerCase();
-        String message = build.getProject().getName() + " " + build.getDisplayName() + ": " + resultString;
-        // possible TODO: get most recent committer from log or even just show all using build.getCulprits()
+        if (!DESCRIPTOR.getSmartNotify() && build.getResult() == Result.SUCCESS) resultString = resultString.toLowerCase();
+        String message = build.getProject().getName() + " " + build.getDisplayName() + " \"" + changeString + "\": " + resultString;
         if (hudsonUrl != null && hudsonUrl.length() > 1) {
-            message = message + " (" + hudsonUrl + build.getUrl() + ")";
+            message = message + "\n" + hudsonUrl + build.getUrl();
         }
         room.speak(message);
     }
