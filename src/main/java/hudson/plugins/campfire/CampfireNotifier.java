@@ -42,7 +42,9 @@ public class CampfireNotifier extends Notifier {
 
     private void publish(AbstractBuild<?, ?> build) throws IOException {
         checkCampfireConnection();
-        String message = build.getProject().getName() + " " + build.getDisplayName() + ": " + build.getResult().toString();
+        String resultString = build.getResult().toString();
+        if ( !DESCRIPTOR.getSmartNotify() && build.getResult() == Result.SUCCESS ) resultString = resultString.toLowerCase();
+        String message = build.getProject().getName() + " " + build.getDisplayName() + ": " + resultString;
         // possible TODO: get most recent committer from log or even just show all using build.getCulprits()
         if (hudsonUrl != null && hudsonUrl.length() > 1) {
             message = message + " (" + hudsonUrl + build.getUrl() + ")";
@@ -84,8 +86,8 @@ public class CampfireNotifier extends Notifier {
             BuildListener listener) throws InterruptedException, IOException {
         // If SmartNotify is enabled, only notify if:
         //  (1) there was no previous build, or
-        //  (2) if there was a failure, or
-        //  (3) if previous build failed and the current build succeeded.
+        //  (2) the current build did not succeed, or
+        //  (3) the previous build failed and the current build succeeded.
         if (DESCRIPTOR.getSmartNotify()) {
             AbstractBuild previousBuild = build.getPreviousBuild();
             if (previousBuild == null ||
