@@ -9,7 +9,9 @@ import hudson.model.BuildListener;
 import hudson.model.Result;
 import hudson.model.User;
 import hudson.scm.ChangeLogSet;
-import java.lang.reflect.*;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import java.lang.reflect.Method;
 
 import java.io.IOException;
 import org.xml.sax.SAXException;
@@ -28,6 +30,8 @@ public class CampfireNotifier extends Notifier {
      */
     @Extension
     public static final DescriptorImpl DESCRIPTOR = new DescriptorImpl();
+
+    private static final Logger LOGGER = Logger.getLogger(CampfireNotifier.class.getName());
 
     public CampfireNotifier() throws IOException {
         super();
@@ -54,13 +58,19 @@ public class CampfireNotifier extends Notifier {
             ChangeLogSet.Entry entry = build.getChangeSet().iterator().next();
             // note: iterator should return recent changes first, but GitChangeSetList doesn't (at the moment)
             if (changeSet.getClass().getSimpleName().equals("GitChangeSetList")) {
+                String log_warn_prefix = "Workaround to obtain latest commit info from git plugin failed: ";
                 try {
                     Method getDateMethod = entry.getClass().getDeclaredMethod("getDate");
                     for(ChangeLogSet.Entry nextEntry : build.getChangeSet()) {
                         if ( ( (String)getDateMethod.invoke(entry) ).compareTo( (String)getDateMethod.invoke(nextEntry) ) < 0 ) entry = nextEntry;
                     }
+                } catch ( NoSuchMethodException e ) {
+                    LOGGER.log(Level.WARNING, log_warn_prefix + e.getMessage());
+                } catch ( IllegalAccessException e ) {
+                    LOGGER.log(Level.WARNING, log_warn_prefix + e.getMessage());
+                } catch ( SecurityException e ) {
+                    LOGGER.log(Level.WARNING, log_warn_prefix + e.getMessage());
                 } catch ( Exception e ) {
-                    // FIXME - at least deal with some of the checked exceptions
                     throw new RuntimeException(e.getMessage(), e);
                 }
             }
