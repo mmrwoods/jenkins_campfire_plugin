@@ -38,9 +38,9 @@ public class CampfireNotifier extends Notifier {
         initialize();
     }
 
-    public CampfireNotifier(String subdomain, String token, String room, String hudsonUrl, boolean ssl) throws IOException {
+    public CampfireNotifier(String subdomain, String token, String room, String hudsonUrl, boolean ssl, boolean smartNotify) throws IOException {
         super();
-        initialize(subdomain, token, room, hudsonUrl, ssl);
+        initialize(subdomain, token, room, hudsonUrl, ssl, smartNotify);
     }
 
     public BuildStepMonitor getRequiredMonitorService() {
@@ -83,9 +83,9 @@ public class CampfireNotifier extends Notifier {
             }
         }
         String resultString = result.toString();
-        if (!DESCRIPTOR.getSmartNotify() && result == Result.SUCCESS) resultString = resultString.toLowerCase();
+        if (!smartNotify && result == Result.SUCCESS) resultString = resultString.toLowerCase();
         String message = build.getProject().getName() + " " + build.getDisplayName() + " \"" + changeString + "\": " + resultString;
-        if (hudsonUrl != null && hudsonUrl.length() > 1 && (DESCRIPTOR.getSmartNotify() || result != Result.SUCCESS)) {
+        if (hudsonUrl != null && hudsonUrl.length() > 1 && (smartNotify || result != Result.SUCCESS)) {
             message = message + " (" + hudsonUrl + build.getUrl() + ")";
         }
         room.speak(message);
@@ -98,10 +98,10 @@ public class CampfireNotifier extends Notifier {
     }
 
     private void initialize() throws IOException {
-        initialize(DESCRIPTOR.getSubdomain(), DESCRIPTOR.getToken(), DESCRIPTOR.getRoom(), DESCRIPTOR.getHudsonUrl(), DESCRIPTOR.getSsl());
+        initialize(DESCRIPTOR.getSubdomain(), DESCRIPTOR.getToken(), DESCRIPTOR.getRoom(), DESCRIPTOR.getHudsonUrl(), DESCRIPTOR.getSsl(), DESCRIPTOR.getSmartNotify());
     }
 
-    private void initialize(String subdomain, String token, String room, String hudsonUrl, boolean ssl) throws IOException {
+    private void initialize(String subdomain, String token, String room, String hudsonUrl, boolean ssl, boolean smartNotify) throws IOException {
         campfire = new Campfire(subdomain, token, ssl);
         try {
             this.room = campfire.findRoomByName(room);
@@ -118,6 +118,7 @@ public class CampfireNotifier extends Notifier {
             throw new IOException("Cannot join room: " + e.getMessage());
         }
         this.hudsonUrl = hudsonUrl;
+        this.smartNotify = smartNotify;
     }
 
     @Override
@@ -127,7 +128,7 @@ public class CampfireNotifier extends Notifier {
         //  (1) there was no previous build, or
         //  (2) the current build did not succeed, or
         //  (3) the previous build failed and the current build succeeded.
-        if (DESCRIPTOR.getSmartNotify()) {
+        if (smartNotify) {
             AbstractBuild previousBuild = build.getPreviousBuild();
             if (previousBuild == null ||
                 build.getResult() != Result.SUCCESS ||
