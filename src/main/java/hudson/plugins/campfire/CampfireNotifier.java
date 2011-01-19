@@ -12,6 +12,8 @@ import hudson.scm.ChangeLogSet;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.lang.reflect.Method;
+import java.io.*;
+import java.util.regex.Pattern;
 
 import java.io.IOException;
 import org.xml.sax.SAXException;
@@ -56,14 +58,30 @@ public class CampfireNotifier extends Notifier {
         } else if (build.getChangeSet().iterator().hasNext()) {
             ChangeLogSet changeSet = build.getChangeSet();
             ChangeLogSet.Entry entry = build.getChangeSet().iterator().next();
-            // note: iterator should return recent changes first, but GitChangeSetList doesn't (at the moment)
+            // note: iterator should return recent changes first, but GitChangeSetList currently reverses the log entries
             if (changeSet.getClass().getSimpleName().equals("GitChangeSetList")) {
                 String log_warn_prefix = "Workaround to obtain latest commit info from git plugin failed: ";
                 try {
-                    Method getDateMethod = entry.getClass().getDeclaredMethod("getDate");
-                    for(ChangeLogSet.Entry nextEntry : build.getChangeSet()) {
-                        if ( ( (String)getDateMethod.invoke(entry) ).compareTo( (String)getDateMethod.invoke(nextEntry) ) < 0 ) entry = nextEntry;
+                    // find the sha for the first commit in the changelog file, and then grab the corresponding entry from the changeset, yikes!
+                    String changeLogPath = build.getRootDir().toString() + File.separator + "changelog.xml";
+                    String line;
+                    String sha = "";
+                    BufferedReader reader = new BufferedReader(new FileReader(changeLogPath));
+                    while((line = reader.readLine()) != null) {
+                        line = reader.readLine();
+                        if (line.matches("^commit [a-zA-Z0-9]+$")) {
+                            sha = line.replace("commit ", "");
+                            break;
+                        }
                     }
+                    if (sha != "") {
+                        Method getIdMethod = entry.getClass().getDeclaredMethod("getId");
+                        for(ChangeLogSet.Entry nextEntry : build.getChangeSet()) {
+                            if ( ( (String)getIdMethod.invoke(entry) ).compareTo(sha) != 0 ) entry = nextEntry;
+                        }
+                    }
+                } catch ( IOException e ){
+                  LOGGER.log(Level.WARNING, log_warn_prefix + e.getMessage());
                 } catch ( NoSuchMethodException e ) {
                     LOGGER.log(Level.WARNING, log_warn_prefix + e.getMessage());
                 } catch ( IllegalAccessException e ) {
