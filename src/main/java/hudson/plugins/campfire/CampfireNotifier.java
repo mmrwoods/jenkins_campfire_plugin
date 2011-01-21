@@ -68,12 +68,12 @@ public class CampfireNotifier extends Notifier {
                     String sha = "";
                     BufferedReader reader = new BufferedReader(new FileReader(changeLogPath));
                     while((line = reader.readLine()) != null) {
-                        line = reader.readLine();
                         if (line.matches("^commit [a-zA-Z0-9]+$")) {
                             sha = line.replace("commit ", "");
                             break;
                         }
                     }
+                    reader.close();
                     if (sha != "") {
                         Method getIdMethod = entry.getClass().getDeclaredMethod("getId");
                         for(ChangeLogSet.Entry nextEntry : build.getChangeSet()) {
