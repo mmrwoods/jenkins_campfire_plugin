@@ -64,10 +64,14 @@ public class DescriptorImpl extends BuildStepDescriptor<Publisher> {
      */
     @Override
     public Publisher newInstance(StaplerRequest req, JSONObject formData) throws FormException {
+        String projectRoom = req.getParameter("roomName");
+        if ( projectRoom == null || projectRoom.trim().length() == 0 ) {
+            projectRoom = room;
+        }
         try {
-            return new CampfireNotifier(subdomain, token, room, hudsonUrl, ssl, smartNotify);
+            return new CampfireNotifier(subdomain, token, projectRoom, hudsonUrl, ssl, smartNotify);
         } catch (Exception e) {
-            throw new FormException("Failed to initialize campfire notifier - check your global campfire notifier configuration settings", e, "");
+            throw new FormException("Failed to initialize campfire notifier - check your campfire notifier configuration settings", e, "");
         }
     }
 

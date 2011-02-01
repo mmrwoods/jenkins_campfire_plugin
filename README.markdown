@@ -30,7 +30,11 @@ When the build has completed, you'll have a .hpi file available which needs to b
 
     rm -rf /var/lib/hudson/plugins/campfire*
 
-Then use the advanced tab of the plugin manager to upload the hpi file. Finally, restart hudson (note: not reload configuration, restart the hudson daemon).
+Then either use the advanced tab of the plugin manager to upload the hpi file or just copy it to the plugins directory, e.g. 
+
+    cp campfire.hpi /var/lib/hudson/plugins/
+
+Finally, restart hudson (note: not reload configuration, restart the hudson daemon).
 
 ### Troubleshooting
 

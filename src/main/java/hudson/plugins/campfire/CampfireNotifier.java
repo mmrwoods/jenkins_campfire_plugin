@@ -27,9 +27,16 @@ public class CampfireNotifier extends Notifier {
     private String hudsonUrl;
     private boolean smartNotify;
 
-    /**
-     * Descriptor should be singleton. (Won't this just set a class constant to an instance (but not the only possible instance) of DescriptorImpl?)
-     */
+    // getter for project configuration..
+    // Configured room name should be null unless different from descriptor/global room name
+    public String getConfiguredRoomName() {
+        if ( DESCRIPTOR.getRoom().equals(room.getName()) ) {
+            return null;   
+        } else {
+            return room.getName();  
+        }
+    }
+
     @Extension
     public static final DescriptorImpl DESCRIPTOR = new DescriptorImpl();
 
@@ -119,12 +126,12 @@ public class CampfireNotifier extends Notifier {
         initialize(DESCRIPTOR.getSubdomain(), DESCRIPTOR.getToken(), DESCRIPTOR.getRoom(), DESCRIPTOR.getHudsonUrl(), DESCRIPTOR.getSsl(), DESCRIPTOR.getSmartNotify());
     }
 
-    private void initialize(String subdomain, String token, String room, String hudsonUrl, boolean ssl, boolean smartNotify) throws IOException {
+    private void initialize(String subdomain, String token, String roomName, String hudsonUrl, boolean ssl, boolean smartNotify) throws IOException {
         campfire = new Campfire(subdomain, token, ssl);
         try {
-            this.room = campfire.findRoomByName(room);
+            this.room = campfire.findRoomByName(roomName);
             if ( this.room == null ) {
-              throw new IOException("Room '" + room + "' not found");
+                throw new IOException("Room '" + roomName + "' not found");
             }
         } catch (IOException e) {
             throw new IOException("Cannot join room: " + e.getMessage());
