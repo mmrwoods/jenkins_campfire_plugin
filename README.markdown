@@ -30,8 +30,8 @@ it up. It does work though, and we use it daily without any trouble.
 
 ### Installation 
 
-You'll need to have JDK 6 and maven2 installed to build the plugin. On OSX with
-macports this is as simple as...
+You'll need to have JDK 6 and maven2 installed to build the plugin. This should
+be as simple as asking your package manager to install maven2, e.g.
 
     sudo port install maven2
 
@@ -41,16 +41,16 @@ Then clone the repository and build the package
     cd hudson_campfire_plugin 
     mvn package
 
-When the build has completed, you'll have a .hpi file available which needs to
-be uploaded to your Hudson installation. If you already have a campfire plugin
-installed, you need to delete it first, e.g.
+When the build has completed, you'll find a campfire.hpi file in the target
+directory, which needs to be uploaded to your Hudson installation. If you
+already have a campfire plugin installed, you need to delete it first, e.g.
 
     rm -rf /var/lib/hudson/plugins/campfire*
 
 Then either use the advanced tab of the plugin manager to upload the hpi file or
 just copy it to the plugins directory, e.g. 
 
-    cp campfire.hpi /var/lib/hudson/plugins/
+    cp target/campfire.hpi /var/lib/hudson/plugins/
 
 Finally, restart hudson (note: not reload configuration, restart the hudson
 daemon).
