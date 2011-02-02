@@ -19,9 +19,9 @@ number of issues and add some extra features...
 Thanks to Joshua Krall, we now have support for SSL, and the plugin works after
 upgrading to Hudson ver. 1.363
 
-Brad Greenlee recently added a smart notification feature, which disables
+Recently, Brad Greenlee added a smart notification feature, which disables
 notifications for successful builds unless the previous build was unsuccessful,
-and I've added commit info to build notifications and an option to customize the
+and I added commit info to build notifications and an option to customize the
 room to which notifications are sent per-project.
 
 Note: The plugin code is a bit of a mess, partly just because I don't have a 
