@@ -76,7 +76,7 @@ public class DescriptorImpl extends BuildStepDescriptor<Publisher> {
         try {
             return new CampfireNotifier(subdomain, token, projectRoom, hudsonUrl, ssl, smartNotify);
         } catch (Exception e) {
-            LOGGER.log(Level.WARNING, "Could not create new instance: " + e.getMessage());
+            LOGGER.log(Level.WARNING, "Could not create new instance", e);
             throw new FormException("Failed to initialize campfire notifier - check your campfire notifier configuration settings", e, "");
         }
     }
@@ -95,7 +95,7 @@ public class DescriptorImpl extends BuildStepDescriptor<Publisher> {
         try {
             new CampfireNotifier(subdomain, token, room, hudsonUrl, ssl, smartNotify);
         } catch (Exception e) {
-            LOGGER.log(Level.WARNING, "Configuration could not be saved: " + e.getMessage());
+            LOGGER.log(Level.WARNING, "Configuration could not be saved", e);
             throw new FormException("Failed to initialize campfire notifier - check your global campfire notifier configuration settings", e, "");
         }
         save();

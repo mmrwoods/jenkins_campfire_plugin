@@ -67,7 +67,7 @@ public class CampfireNotifier extends Notifier {
             ChangeLogSet.Entry entry = build.getChangeSet().iterator().next();
             // note: iterator should return recent changes first, but GitChangeSetList currently reverses the log entries
             if (changeSet.getClass().getSimpleName().equals("GitChangeSetList")) {
-                String log_warn_prefix = "Workaround to obtain latest commit info from git plugin failed: ";
+                String exception_log_message = "Workaround to obtain latest commit info from git plugin failed";
                 try {
                     // find the sha for the first commit in the changelog file, and then grab the corresponding entry from the changeset, yikes!
                     String changeLogPath = build.getRootDir().toString() + File.separator + "changelog.xml";
@@ -88,15 +88,15 @@ public class CampfireNotifier extends Notifier {
                         }
                     }
                 } catch ( IOException e ){
-                  LOGGER.log(Level.WARNING, log_warn_prefix + e.getMessage());
+                  LOGGER.log(Level.WARNING, exception_log_message, e);
                 } catch ( NoSuchMethodException e ) {
-                    LOGGER.log(Level.WARNING, log_warn_prefix + e.getMessage());
+                    LOGGER.log(Level.WARNING, exception_log_message, e);
                 } catch ( IllegalAccessException e ) {
-                    LOGGER.log(Level.WARNING, log_warn_prefix + e.getMessage());
+                    LOGGER.log(Level.WARNING, exception_log_message, e);
                 } catch ( SecurityException e ) {
-                    LOGGER.log(Level.WARNING, log_warn_prefix + e.getMessage());
+                    LOGGER.log(Level.WARNING, exception_log_message, e);
                 } catch ( Exception e ) {
-                    throw new RuntimeException(e.getMessage(), e);
+                    throw new RuntimeException(e.getClass().getName() + ": " + e.getMessage(), e);
                 }
             }
             String commitMsg = entry.getMsg().trim();
@@ -134,13 +134,13 @@ public class CampfireNotifier extends Notifier {
                 throw new IOException("Room '" + roomName + "' not found");
             }
         } catch (IOException e) {
-            throw new IOException("Cannot join room: " + e.getMessage());
+            throw new IOException("Cannot join room", e);
         } catch (ParserConfigurationException e) {
-            throw new IOException("Cannot join room: " + e.getMessage());
+            throw new IOException("Cannot join room", e);
         } catch (XPathExpressionException e) {
-            throw new IOException("Cannot join room: " + e.getMessage());
+            throw new IOException("Cannot join room", e);
         } catch (SAXException e) {
-            throw new IOException("Cannot join room: " + e.getMessage());
+            throw new IOException("Cannot join room", e);
         }
         this.hudsonUrl = hudsonUrl;
         this.smartNotify = smartNotify;
