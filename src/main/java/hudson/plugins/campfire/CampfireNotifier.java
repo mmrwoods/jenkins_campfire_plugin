@@ -88,7 +88,7 @@ public class CampfireNotifier extends Notifier {
                         }
                     }
                 } catch ( IOException e ){
-                  LOGGER.log(Level.WARNING, exception_log_message, e);
+                    LOGGER.log(Level.WARNING, exception_log_message, e);
                 } catch ( NoSuchMethodException e ) {
                     LOGGER.log(Level.WARNING, exception_log_message, e);
                 } catch ( IllegalAccessException e ) {
@@ -128,19 +128,24 @@ public class CampfireNotifier extends Notifier {
 
     private void initialize(String subdomain, String token, String roomName, String hudsonUrl, boolean ssl, boolean smartNotify) throws IOException {
         campfire = new Campfire(subdomain, token, ssl);
+        String exception_message = "Failed to initialize campfire notifier";
         try {
             this.room = campfire.findRoomByName(roomName);
             if ( this.room == null ) {
                 throw new IOException("Room '" + roomName + "' not found");
             }
         } catch (IOException e) {
-            throw new IOException("Cannot join room", e);
+            LOGGER.log(Level.WARNING, exception_message, e);
+            throw new IOException(exception_message, e);
         } catch (ParserConfigurationException e) {
-            throw new IOException("Cannot join room", e);
+            LOGGER.log(Level.WARNING, exception_message, e);
+            throw new IOException(exception_message, e);
         } catch (XPathExpressionException e) {
-            throw new IOException("Cannot join room", e);
+            LOGGER.log(Level.WARNING, exception_message, e);
+            throw new IOException(exception_message, e);
         } catch (SAXException e) {
-            throw new IOException("Cannot join room", e);
+            LOGGER.log(Level.WARNING, exception_message, e);
+            throw new IOException(exception_message, e);
         }
         this.hudsonUrl = hudsonUrl;
         this.smartNotify = smartNotify;

@@ -13,9 +13,6 @@ import net.sf.json.JSONObject;
 import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.xpath.XPathExpressionException;
 
-import java.util.logging.Level;
-import java.util.logging.Logger;
-
 public class DescriptorImpl extends BuildStepDescriptor<Publisher> {
     private boolean enabled = false;
     private String subdomain;
@@ -24,8 +21,6 @@ public class DescriptorImpl extends BuildStepDescriptor<Publisher> {
     private String hudsonUrl;
     private boolean ssl;
     private boolean smartNotify;
-
-    private static final Logger LOGGER = Logger.getLogger(CampfireNotifier.class.getName());
 
     public DescriptorImpl() {
         super(CampfireNotifier.class);
@@ -76,7 +71,6 @@ public class DescriptorImpl extends BuildStepDescriptor<Publisher> {
         try {
             return new CampfireNotifier(subdomain, token, projectRoom, hudsonUrl, ssl, smartNotify);
         } catch (Exception e) {
-            LOGGER.log(Level.WARNING, "Could not create new instance", e);
             throw new FormException("Failed to initialize campfire notifier - check your campfire notifier configuration settings", e, "");
         }
     }
@@ -95,7 +89,6 @@ public class DescriptorImpl extends BuildStepDescriptor<Publisher> {
         try {
             new CampfireNotifier(subdomain, token, room, hudsonUrl, ssl, smartNotify);
         } catch (Exception e) {
-            LOGGER.log(Level.WARNING, "Configuration could not be saved", e);
             throw new FormException("Failed to initialize campfire notifier - check your global campfire notifier configuration settings", e, "");
         }
         save();
