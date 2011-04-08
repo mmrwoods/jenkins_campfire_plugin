@@ -18,7 +18,7 @@
     <f:entry title="API Token" help="${rootURL}/plugin/campfire/help-globalConfig-token.html">
         <f:textbox name="campfireToken" value="${descriptor.getToken()}" />
     </f:entry>
-    <f:entry title="Room" help="${rootURL}/plugin/campfire/help-globalConfig-room.html">
+    <f:entry title="Default Room Name" help="${rootURL}/plugin/campfire/help-globalConfig-room.html">
         <f:textbox name="campfireRoom" value="${descriptor.getRoom()}" />
     </f:entry>
     <f:entry title="Hudson Url" help="${rootURL}/plugin/campfire/help-globalConfig-hudsonUrl.html">

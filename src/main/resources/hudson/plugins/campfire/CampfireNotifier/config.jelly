@@ -3,7 +3,7 @@
     This jelly script is used for per-project configuration.
     See global.jelly for a general discussion about jelly script.
   -->
-    <f:entry title="Project Room (if different from ${descriptor.getRoom()})"  help="${rootURL}/plugin/campfire/help-projectConfig-room.html">
+    <f:entry title="Project Room Name" description="Optional. Use to send notifications to a room other than the default (${descriptor.getRoom()})" help="${rootURL}/plugin/campfire/help-projectConfig-room.html">
       <f:textbox name="roomName" value="${instance.getConfiguredRoomName()}"/>
     </f:entry>
 </j:jelly>
