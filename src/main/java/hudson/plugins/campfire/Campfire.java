@@ -73,6 +73,7 @@ public class Campfire {
 
     public String get(String url) throws IOException {
         GetMethod get = new GetMethod(getProtocol() + getHost() + "/" + url);
+        get.setFollowRedirects(true);
         get.setRequestHeader("Content-Type", "application/xml");
         try {
             client.executeMethod(get);
@@ -83,7 +84,7 @@ public class Campfire {
     }
 
     public boolean verify(int returnCode) {
-        return (returnCode == 200 || (returnCode > 301 && returnCode < 399));
+        return (returnCode == 200);
     }
 
     private List<Room> getRooms() throws IOException, ParserConfigurationException, SAXException, XPathExpressionException {
