@@ -1,6 +1,7 @@
 package hudson.plugins.campfire;
 
 import org.apache.commons.httpclient.HttpClient;
+import org.apache.commons.httpclient.HttpException;
 import org.apache.commons.httpclient.UsernamePasswordCredentials;
 import org.apache.commons.httpclient.Credentials;
 import org.apache.commons.httpclient.auth.AuthScope;
@@ -77,8 +78,11 @@ public class Campfire {
         }
     }
 
-    public boolean verify(int returnCode) {
-        return (returnCode == 200);
+    public boolean verify(int returnCode) throws HttpException {
+        if (returnCode != 200) {
+            throw new HttpException("Unexpected response code: " + Integer.toString(returnCode));
+        }
+        return true;
     }
 
     private List<Room> getRooms() throws IOException, ParserConfigurationException, SAXException, XPathExpressionException {
