@@ -72,6 +72,7 @@ public class Campfire {
         get.setRequestHeader("Content-Type", "application/xml");
         try {
             client.executeMethod(get);
+            verify(get.getStatusCode());
             return get.getResponseBodyAsString();
         } finally {
             get.releaseConnection();
