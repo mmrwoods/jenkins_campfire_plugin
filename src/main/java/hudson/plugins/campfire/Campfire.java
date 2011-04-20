@@ -14,7 +14,6 @@ import java.io.IOException;
 import java.util.List;
 import java.util.ArrayList;
 
-import com.gargoylesoftware.htmlunit.WebClient;
 import java.io.StringReader;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
@@ -30,7 +29,6 @@ import org.xml.sax.InputSource;
 
 public class Campfire {
     private HttpClient client;
-    private WebClient webClient;
     private String subdomain;
     private String token;
     private boolean ssl;
@@ -45,10 +43,6 @@ public class Campfire {
         client.getState().setCredentials(new AuthScope(getHost(), -1, AuthScope.ANY_REALM), defaultcreds);
         client.getParams().setAuthenticationPreemptive(true);
         client.getParams().setParameter("http.useragent", "Mozilla/5.0 (Macintosh; U; Intel Mac OS X 10_6_4; en-us) AppleWebKit/533.16 (KHTML, like Gecko) Version/5.0 Safari/533.16");
-        webClient = new WebClient();
-        webClient.setWebConnection(new HttpClientBackedWebConnection(webClient, client));
-        webClient.setJavaScriptEnabled(true);
-        webClient.setCookiesEnabled(true);
     }
 
     protected String getHost() {
