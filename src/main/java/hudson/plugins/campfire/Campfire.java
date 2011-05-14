@@ -2,12 +2,16 @@ package hudson.plugins.campfire;
 
 import org.apache.commons.httpclient.HttpClient;
 import org.apache.commons.httpclient.HttpException;
+import org.apache.commons.httpclient.HostConfiguration;
 import org.apache.commons.httpclient.UsernamePasswordCredentials;
 import org.apache.commons.httpclient.Credentials;
 import org.apache.commons.httpclient.auth.AuthScope;
 import org.apache.commons.httpclient.methods.PostMethod;
 import org.apache.commons.httpclient.methods.StringRequestEntity;
 import org.xml.sax.SAXException;
+
+import hudson.model.Hudson;
+import hudson.ProxyConfiguration;
 
 import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.xpath.XPathExpressionException;
@@ -40,10 +44,20 @@ public class Campfire {
         this.token = token;
         this.ssl = ssl;
         client = new HttpClient();
-        Credentials defaultcreds = new UsernamePasswordCredentials(token, "x");
-        client.getState().setCredentials(new AuthScope(getHost(), -1, AuthScope.ANY_REALM), defaultcreds);
+        Credentials credentials = new UsernamePasswordCredentials(token, "x");
+        AuthScope authScope = new AuthScope(getHost(), AuthScope.ANY_PORT);
+        client.getState().setCredentials(authScope, credentials);
         client.getParams().setAuthenticationPreemptive(true);
         client.getParams().setParameter("http.useragent", "Mozilla/5.0 (Macintosh; U; Intel Mac OS X 10_6_4; en-us) AppleWebKit/533.16 (KHTML, like Gecko) Version/5.0 Safari/533.16");
+        // proxy configuration, cribbed from hudson.ProxyConfiguration...
+        Hudson h = Hudson.getInstance();
+        ProxyConfiguration p = h!=null ? h.proxy : null;
+        if (p!=null) {
+          client.getHostConfiguration().setProxy(p.name, p.port);
+          Credentials pCredentials = new UsernamePasswordCredentials(p.getUserName(), p.getPassword());
+          AuthScope pAuthScope = new AuthScope(p.name, p.port);
+          client.getState().setProxyCredentials(pAuthScope, pCredentials);
+        }
     }
 
     protected String getHost() {
