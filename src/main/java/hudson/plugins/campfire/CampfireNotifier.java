@@ -67,7 +67,7 @@ public class CampfireNotifier extends Notifier {
             ChangeLogSet.Entry entry = build.getChangeSet().iterator().next();
             // note: iterator should return recent changes first, but GitChangeSetList currently reverses the log entries
             if (changeSet.getClass().getSimpleName().equals("GitChangeSetList")) {
-                String exception_log_message = "Workaround to obtain latest commit info from git plugin failed";
+                String exceptionLogMsg = "Workaround to obtain latest commit info from git plugin failed";
                 try {
                     // find the sha for the first commit in the changelog file, and then grab the corresponding entry from the changeset, yikes!
                     String changeLogPath = build.getRootDir().toString() + File.separator + "changelog.xml";
@@ -88,13 +88,13 @@ public class CampfireNotifier extends Notifier {
                         }
                     }
                 } catch ( IOException e ){
-                    LOGGER.log(Level.WARNING, exception_log_message, e);
+                    LOGGER.log(Level.WARNING, exceptionLogMsg, e);
                 } catch ( NoSuchMethodException e ) {
-                    LOGGER.log(Level.WARNING, exception_log_message, e);
+                    LOGGER.log(Level.WARNING, exceptionLogMsg, e);
                 } catch ( IllegalAccessException e ) {
-                    LOGGER.log(Level.WARNING, exception_log_message, e);
+                    LOGGER.log(Level.WARNING, exceptionLogMsg, e);
                 } catch ( SecurityException e ) {
-                    LOGGER.log(Level.WARNING, exception_log_message, e);
+                    LOGGER.log(Level.WARNING, exceptionLogMsg, e);
                 } catch ( Exception e ) {
                     throw new RuntimeException(e.getClass().getName() + ": " + e.getMessage(), e);
                 }
@@ -128,26 +128,26 @@ public class CampfireNotifier extends Notifier {
 
     private void initialize(String subdomain, String token, String roomName, String hudsonUrl, boolean ssl, boolean smartNotify) throws IOException {
         campfire = new Campfire(subdomain, token, ssl);
-        String exception_message = "Failed to initialize campfire notifier";
+        String exceptionMsg = "Failed to initialize campfire notifier";
         try {
             this.room = campfire.findRoomByName(roomName);
             if ( this.room == null ) {
                 String roomNotFoundMsg = "Room '" + roomName + "' not found";
-                LOGGER.log(Level.WARNING, exception_message, roomNotFoundMsg);
+                LOGGER.log(Level.WARNING, exceptionMsg, roomNotFoundMsg);
                 throw new IOException(roomNotFoundMsg);
             }
         } catch (IOException e) {
-            LOGGER.log(Level.WARNING, exception_message, e);
-            throw new IOException(exception_message, e);
+            LOGGER.log(Level.WARNING, exceptionMsg, e);
+            throw new IOException(exceptionMsg, e);
         } catch (ParserConfigurationException e) {
-            LOGGER.log(Level.WARNING, exception_message, e);
-            throw new IOException(exception_message, e);
+            LOGGER.log(Level.WARNING, exceptionMsg, e);
+            throw new IOException(exceptionMsg, e);
         } catch (XPathExpressionException e) {
-            LOGGER.log(Level.WARNING, exception_message, e);
-            throw new IOException(exception_message, e);
+            LOGGER.log(Level.WARNING, exceptionMsg, e);
+            throw new IOException(exceptionMsg, e);
         } catch (SAXException e) {
-            LOGGER.log(Level.WARNING, exception_message, e);
-            throw new IOException(exception_message, e);
+            LOGGER.log(Level.WARNING, exceptionMsg, e);
+            throw new IOException(exceptionMsg, e);
         }
         this.hudsonUrl = hudsonUrl;
         this.smartNotify = smartNotify;
