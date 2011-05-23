@@ -132,7 +132,9 @@ public class CampfireNotifier extends Notifier {
         try {
             this.room = campfire.findRoomByName(roomName);
             if ( this.room == null ) {
-                throw new IOException("Room '" + roomName + "' not found");
+                String roomNotFoundMsg = "Room '" + roomName + "' not found";
+                LOGGER.log(Level.WARNING, exception_message, roomNotFoundMsg);
+                throw new IOException(roomNotFoundMsg);
             }
         } catch (IOException e) {
             LOGGER.log(Level.WARNING, exception_message, e);
