@@ -1,4 +1,4 @@
-## Campfire plugin for Hudson
+## Campfire notifier plugin for Hudson
 
 This is a fork of the plugin developed by Jens Lukowski. More information about
 the original plugin is available from the [Hudson
