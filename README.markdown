@@ -1,4 +1,4 @@
-## Campfire notifier plugin for Hudson
+## Campfire notifier plugin for Jenkins
 
 This is a fork of the plugin developed by Jens Lukowski. More information about
 the original plugin is available from the [Hudson
@@ -11,24 +11,24 @@ number of issues and add some extra features...
 
 * Refactored the code to fix a number of null pointer exceptions.
 * Moved from per-job to global config.
-* Fixed issues with configuration details being lost after a hudson restart.
-* Tidied up jelly view for configuration form and added help files for each 
+* Fixed issues with configuration details being lost after a restart.
+* Tidied up jelly view for configuration form and added help files for each
   field.
 * Added a link to the build in notifications sent to campfire.
 
-Thanks to Joshua Krall, we now have support for SSL, and the plugin works after
-upgrading to Hudson ver. 1.363
+Other features have since been added including...
 
-Recently, Brad Greenlee added a smart notification feature, which disables
-notifications for successful builds unless the previous build was unsuccessful,
-and I added commit info to build notifications and an option to customize the
-room to which notifications are sent per-project.
+* Support for campfire accounts with SSL enabled, added by to Joshua Krall.
+* A smart notification feature, added by Brad Greenlee, which disables
+  success notifications unless the previous build was unsuccessful.
+* Build nofifications now include commit info.
+* Room to which notifications are sent can be customised per-project.
 
-Note: The plugin code is a bit of a mess, partly just because I don't have a 
+Note: The plugin code is a bit of a mess, partly just because I don't have a
 lot of Java experience, but also because I simply haven't got the time to tidy
 it up. It does work though, and we use it daily without any trouble.
 
-### Installation 
+### Installation
 
 You'll need to have JDK 6 and maven2 installed to build the plugin. This should
 be as simple as asking your package manager to install maven2, e.g.
@@ -37,22 +37,22 @@ be as simple as asking your package manager to install maven2, e.g.
 
 Then clone the repository and build the package
 
-    git clone git://github.com/jgp/hudson_campfire_plugin.git 
-    cd hudson_campfire_plugin 
+    git clone git://github.com/thickpaddy/jenkins_campfire_plugin.git
+    cd jenkins_campfire_plugin
     mvn package
 
 When the build has completed, you'll find a campfire.hpi file in the target
-directory, which needs to be uploaded to your Hudson installation. If you
+directory, which needs to be uploaded to your Jenkins installation. If you
 already have a campfire plugin installed, you need to delete it first, e.g.
 
-    rm -rf /var/lib/hudson/plugins/campfire*
+    rm -rf /var/lib/jenkins/plugins/campfire*
 
 Then either use the advanced tab of the plugin manager to upload the hpi file or
-just copy it to the plugins directory, e.g. 
+just copy it to the plugins directory, e.g.
 
-    cp target/campfire.hpi /var/lib/hudson/plugins/
+    cp target/campfire.hpi /var/lib/jenkins/plugins/
 
-Finally, restart hudson (note: not reload configuration, restart the hudson
+Finally, restart jenkins (note: not reload configuration, restart the jenkins
 daemon).
 
 ### Troubleshooting
