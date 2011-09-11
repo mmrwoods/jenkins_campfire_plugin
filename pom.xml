@@ -10,10 +10,10 @@
   <groupId>org.jvnet.hudson.plugins</groupId>
   <artifactId>campfire</artifactId>
   <packaging>hpi</packaging>
-  <version>2.4.0</version>
-  <name>Hudson Campfire Plugin</name>
-  <description>A Build status publisher that notifies channels on a Campfire server</description>
-  <url>http://wiki.hudson-ci.org/display/HUDSON/Campfire+Plugin</url>
+  <version>2.4.1</version>
+  <name>Jenkins Campfire Plugin</name>
+  <description>A build status notifier that sends notifications to Campfire rooms</description>
+  <url>http://wiki.jenkins-ci.org/display/JENKINS/Campfire+Plugin</url>
   <licenses>
   	<license><name>MIT license</name><comments>All source code is under the MIT license.</comments></license>
   </licenses>
