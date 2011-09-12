@@ -18,7 +18,7 @@ number of issues and add some extra features...
 
 Other features have since been added including...
 
-* Support for campfire accounts with SSL enabled, added by to Joshua Krall.
+* Support for campfire accounts with SSL enabled, added by Joshua Krall.
 * A smart notification feature, added by Brad Greenlee, which disables
   success notifications unless the previous build was unsuccessful.
 * Build nofifications now include commit info.
