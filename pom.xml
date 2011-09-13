@@ -15,8 +15,13 @@
   <description>A build status notifier that sends notifications to Campfire rooms</description>
   <url>http://wiki.jenkins-ci.org/display/JENKINS/Campfire+Plugin</url>
   <licenses>
-  	<license><name>MIT license</name><comments>All source code is under the MIT license.</comments></license>
+    <license><name>MIT license</name><comments>All source code is under the MIT license.</comments></license>
   </licenses>
+  <scm>
+    <connection>scm:git:git://github.com/thickpaddy/jenkins_campfire_plugin.git</connection>
+    <developerConnection>scm:git:git@github.com:thickpaddy/jenkins_campfire_plugin.git</developerConnection>
+    <url>http://github.com/thickpaddy/jenkins_campfire_plugin</url>
+  </scm>
   <dependencies>
     <dependency>
       <groupId>org.jvnet.hudson.main</groupId>
@@ -27,11 +32,6 @@
       <artifactId>commons-httpclient</artifactId>
       <version>3.1-rc1</version>
     </dependency>
-      <dependency>
-        <groupId>org.jvnet.hudson</groupId>
-        <artifactId>htmlunit</artifactId>
-        <version>2.2-hudson-10</version>
-      </dependency>
   </dependencies>
   <developers>
     <developer>
@@ -44,9 +44,7 @@
     <developer>
       <id>thickpaddy</id>
       <name>Mark Woods</name>
-      <email>mark dot woods at jgp</email>
-      <organization>Jobsgopublic</organization>
-      <organizationUrl>http://www.jgp.co.uk</organizationUrl>
+      <url>https://github.com/thickpaddy</url>
     </developer>
     <developer>
       <id>jkrall</id>
