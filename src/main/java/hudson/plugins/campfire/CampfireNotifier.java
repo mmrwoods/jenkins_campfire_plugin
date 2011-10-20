@@ -110,17 +110,18 @@ public class CampfireNotifier extends Notifier {
         String resultString = result.toString();
         if (!smartNotify && result == Result.SUCCESS) resultString = resultString.toLowerCase();
         String message = build.getProject().getName() + " " + build.getDisplayName() + " \"" + changeString + "\": " + resultString;
+        String message_sound = "";
         if (resultString == "FAILURE") {
-          String message_sound = "/play trombone"
+          message_sound = "trombone";
         } else {
-          String message_sound = "/play rimshot"
+          message_sound = "rimshot";
         }
         String fail_message = build.getProject().getName() + " " + build.getDisplayName() + " \"" + changeString + "\": " + resultString;
         if (hudsonUrl != null && hudsonUrl.length() > 1 && (smartNotify || result != Result.SUCCESS)) {
             message = message + " (" + hudsonUrl + build.getUrl() + ")";
         }
         room.speak(message);
-        room.speak(message_sound);
+        room.play(message_sound);
     }
 
     private void checkCampfireConnection() throws IOException {
