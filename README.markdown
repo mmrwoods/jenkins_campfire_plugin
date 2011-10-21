@@ -21,6 +21,7 @@ Other features have since been added including...
 * Support for campfire accounts with SSL enabled, added by Joshua Krall.
 * A smart notification feature, added by Brad Greenlee, which disables
   success notifications unless the previous build was unsuccessful.
+* Play sounds on build success and failure, added by Henry Poydar.
 * Build nofifications now include commit info.
 * Room to which notifications are sent can be customised per-project.
 
