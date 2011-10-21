@@ -54,5 +54,10 @@
       <id>bgreenlee</id>
       <name>Brad Greenlee</name>
     </developer>
+    <developer>
+      <id>hpoydar</id>
+      <name>Henry Poydar</name>
+      <url>https://github.com/hpoydar</url>
+    </developer>
   </developers>
 </project>
