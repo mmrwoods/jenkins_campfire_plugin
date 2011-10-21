@@ -26,6 +26,7 @@ public class CampfireNotifier extends Notifier {
     private Room room;
     private String hudsonUrl;
     private boolean smartNotify;
+    private boolean sound;
 
     // getter for project configuration..
     // Configured room name should be null unless different from descriptor/global room name
@@ -47,9 +48,9 @@ public class CampfireNotifier extends Notifier {
         initialize();
     }
 
-    public CampfireNotifier(String subdomain, String token, String room, String hudsonUrl, boolean ssl, boolean smartNotify) throws IOException {
+    public CampfireNotifier(String subdomain, String token, String room, String hudsonUrl, boolean ssl, boolean smartNotify, boolean sound) throws IOException {
         super();
-        initialize(subdomain, token, room, hudsonUrl, ssl, smartNotify);
+        initialize(subdomain, token, room, hudsonUrl, ssl, smartNotify, sound);
     }
 
     public BuildStepMonitor getRequiredMonitorService() {
@@ -110,10 +111,20 @@ public class CampfireNotifier extends Notifier {
         String resultString = result.toString();
         if (!smartNotify && result == Result.SUCCESS) resultString = resultString.toLowerCase();
         String message = build.getProject().getName() + " " + build.getDisplayName() + " \"" + changeString + "\": " + resultString;
+        String fail_message = build.getProject().getName() + " " + build.getDisplayName() + " \"" + changeString + "\": " + resultString;
         if (hudsonUrl != null && hudsonUrl.length() > 1 && (smartNotify || result != Result.SUCCESS)) {
             message = message + " (" + hudsonUrl + build.getUrl() + ")";
         }
         room.speak(message);
+        if (sound) {
+          String message_sound = "";
+          if (resultString == "FAILURE") {
+            message_sound = "trombone";
+          } else {
+            message_sound = "rimshot";
+          }
+          room.play(message_sound);
+        }
     }
 
     private void checkCampfireConnection() throws IOException {
@@ -123,10 +134,10 @@ public class CampfireNotifier extends Notifier {
     }
 
     private void initialize() throws IOException {
-        initialize(DESCRIPTOR.getSubdomain(), DESCRIPTOR.getToken(), room.getName(), DESCRIPTOR.getHudsonUrl(), DESCRIPTOR.getSsl(), DESCRIPTOR.getSmartNotify());
+        initialize(DESCRIPTOR.getSubdomain(), DESCRIPTOR.getToken(), room.getName(), DESCRIPTOR.getHudsonUrl(), DESCRIPTOR.getSsl(), DESCRIPTOR.getSmartNotify(), DESCRIPTOR.getSound());
     }
 
-    private void initialize(String subdomain, String token, String roomName, String hudsonUrl, boolean ssl, boolean smartNotify) throws IOException {
+    private void initialize(String subdomain, String token, String roomName, String hudsonUrl, boolean ssl, boolean smartNotify, boolean sound) throws IOException {
         campfire = new Campfire(subdomain, token, ssl);
         String exceptionMsg = "Failed to initialize campfire notifier";
         try {
@@ -151,6 +162,7 @@ public class CampfireNotifier extends Notifier {
         }
         this.hudsonUrl = hudsonUrl;
         this.smartNotify = smartNotify;
+        this.sound = sound;
     }
 
     @Override
