@@ -91,6 +91,7 @@ public class DescriptorImpl extends BuildStepDescriptor<Publisher> {
         }
         ssl = req.getParameter("campfireSsl") != null;
         smartNotify = req.getParameter("campfireSmartNotify") != null;
+        sound = req.getParameter("campfireSound") != null;
         try {
             new CampfireNotifier(subdomain, token, room, hudsonUrl, ssl, smartNotify, sound);
         } catch (Exception e) {

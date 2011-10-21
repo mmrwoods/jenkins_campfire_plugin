@@ -162,6 +162,7 @@ public class CampfireNotifier extends Notifier {
         }
         this.hudsonUrl = hudsonUrl;
         this.smartNotify = smartNotify;
+        this.sound = sound;
     }
 
     @Override
