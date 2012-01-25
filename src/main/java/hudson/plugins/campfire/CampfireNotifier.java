@@ -72,17 +72,8 @@ public class CampfireNotifier extends Notifier {
                 try {
                     // find the sha for the first commit in the changelog file, and then grab the corresponding entry from the changeset, yikes!
                     String changeLogPath = build.getRootDir().toString() + File.separator + "changelog.xml";
-                    String line;
-                    String sha = "";
-                    BufferedReader reader = new BufferedReader(new FileReader(changeLogPath));
-                    while((line = reader.readLine()) != null) {
-                        if (line.matches("^commit [a-zA-Z0-9]+$")) {
-                            sha = line.replace("commit ", "");
-                            break;
-                        }
-                    }
-                    reader.close();
-                    if (sha != "") {
+                    String sha = getCommitHash(changeLogPath);
+                    if (!"".equals(sha)) {
                         Method getIdMethod = entry.getClass().getDeclaredMethod("getId");
                         for(ChangeLogSet.Entry nextEntry : build.getChangeSet()) {
                             if ( ( (String)getIdMethod.invoke(entry) ).compareTo(sha) != 0 ) entry = nextEntry;
@@ -101,7 +92,7 @@ public class CampfireNotifier extends Notifier {
                 }
             }
             String commitMsg = entry.getMsg().trim();
-            if (commitMsg != "") {
+            if (!"".equals(commitMsg)) {
                 if (commitMsg.length() > 47) {
                     commitMsg = commitMsg.substring(0, 46)  + "...";
                 }
@@ -111,20 +102,33 @@ public class CampfireNotifier extends Notifier {
         String resultString = result.toString();
         if (!smartNotify && result == Result.SUCCESS) resultString = resultString.toLowerCase();
         String message = build.getProject().getName() + " " + build.getDisplayName() + " \"" + changeString + "\": " + resultString;
-        String fail_message = build.getProject().getName() + " " + build.getDisplayName() + " \"" + changeString + "\": " + resultString;
         if (hudsonUrl != null && hudsonUrl.length() > 1 && (smartNotify || result != Result.SUCCESS)) {
             message = message + " (" + hudsonUrl + build.getUrl() + ")";
         }
         room.speak(message);
         if (sound) {
-          String message_sound = "";
-          if (resultString == "FAILURE") {
+          String message_sound;
+          if ("FAILURE".equals(resultString)) {
             message_sound = "trombone";
           } else {
             message_sound = "rimshot";
           }
           room.play(message_sound);
         }
+    }
+
+    private String getCommitHash(String changeLogPath) throws IOException {
+        String sha = "";
+        BufferedReader reader = new BufferedReader(new FileReader(changeLogPath));
+        String line;
+        while((line = reader.readLine()) != null) {
+            if (line.matches("^commit [a-zA-Z0-9]+$")) {
+                sha = line.replace("commit ", "");
+                break;
+            }
+        }
+        reader.close();
+        return sha;
     }
 
     private void checkCampfireConnection() throws IOException {
