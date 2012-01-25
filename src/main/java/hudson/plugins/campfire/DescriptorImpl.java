@@ -1,17 +1,10 @@
 package hudson.plugins.campfire;
 
-import hudson.tasks.Publisher;
-import hudson.tasks.BuildStepDescriptor;
 import hudson.model.AbstractProject;
-
-import java.io.IOException;
-
-import org.kohsuke.stapler.StaplerRequest;
-import org.xml.sax.SAXException;
+import hudson.tasks.BuildStepDescriptor;
+import hudson.tasks.Publisher;
 import net.sf.json.JSONObject;
-
-import javax.xml.parsers.ParserConfigurationException;
-import javax.xml.xpath.XPathExpressionException;
+import org.kohsuke.stapler.StaplerRequest;
 
 public class DescriptorImpl extends BuildStepDescriptor<Publisher> {
     private boolean enabled = false;
@@ -76,7 +69,7 @@ public class DescriptorImpl extends BuildStepDescriptor<Publisher> {
         try {
             return new CampfireNotifier(subdomain, token, projectRoom, hudsonUrl, ssl, smartNotify, sound);
         } catch (Exception e) {
-            throw new FormException("Failed to initialize campfire notifier - check your campfire notifier configuration settings", e, "");
+            throw new FormException("Failed to initialize campfire notifier - check your campfire notifier configuration settings: " + e.getMessage(), e, "");
         }
     }
 
@@ -95,7 +88,7 @@ public class DescriptorImpl extends BuildStepDescriptor<Publisher> {
         try {
             new CampfireNotifier(subdomain, token, room, hudsonUrl, ssl, smartNotify, sound);
         } catch (Exception e) {
-            throw new FormException("Failed to initialize campfire notifier - check your global campfire notifier configuration settings", e, "");
+            throw new FormException("Failed to initialize campfire notifier - check your global campfire notifier configuration settings: " + e.getMessage(), e, "");
         }
         save();
         return super.configure(req, json);
