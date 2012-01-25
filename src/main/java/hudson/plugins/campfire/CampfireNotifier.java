@@ -1,24 +1,24 @@
 package hudson.plugins.campfire;
 
-import hudson.tasks.Notifier;
-import hudson.tasks.BuildStepMonitor;
 import hudson.Extension;
 import hudson.Launcher;
 import hudson.model.AbstractBuild;
 import hudson.model.BuildListener;
 import hudson.model.Result;
-import hudson.model.User;
 import hudson.scm.ChangeLogSet;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-import java.lang.reflect.Method;
-import java.io.*;
-import java.util.regex.Pattern;
-
-import java.io.IOException;
+import hudson.tasks.BuildStepMonitor;
+import hudson.tasks.Notifier;
 import org.xml.sax.SAXException;
+
 import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.xpath.XPathExpressionException;
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileReader;
+import java.io.IOException;
+import java.lang.reflect.Method;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 public class CampfireNotifier extends Notifier {
 
@@ -143,9 +143,8 @@ public class CampfireNotifier extends Notifier {
         try {
             this.room = campfire.findRoomByName(roomName);
             if ( this.room == null ) {
-                String roomNotFoundMsg = "Room '" + roomName + "' not found";
-                LOGGER.log(Level.WARNING, exceptionMsg, roomNotFoundMsg);
-                throw new IOException(roomNotFoundMsg);
+                exceptionMsg = exceptionMsg + ": Room '" + roomName + "' not found - verify name and room permissions";
+                throw new IOException(exceptionMsg);
             }
         } catch (IOException e) {
             LOGGER.log(Level.WARNING, exceptionMsg, e);
