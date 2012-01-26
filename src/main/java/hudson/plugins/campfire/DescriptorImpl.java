@@ -6,6 +6,9 @@ import hudson.tasks.Publisher;
 import net.sf.json.JSONObject;
 import org.kohsuke.stapler.StaplerRequest;
 
+import java.util.logging.Level;
+import java.util.logging.Logger;
+
 public class DescriptorImpl extends BuildStepDescriptor<Publisher> {
     private boolean enabled = false;
     private String subdomain;
@@ -15,6 +18,7 @@ public class DescriptorImpl extends BuildStepDescriptor<Publisher> {
     private boolean ssl;
     private boolean smartNotify;
     private boolean sound;
+    private static final Logger LOGGER = Logger.getLogger(DescriptorImpl.class.getName());
 
     public DescriptorImpl() {
         super(CampfireNotifier.class);
@@ -69,7 +73,9 @@ public class DescriptorImpl extends BuildStepDescriptor<Publisher> {
         try {
             return new CampfireNotifier(subdomain, token, projectRoom, hudsonUrl, ssl, smartNotify, sound);
         } catch (Exception e) {
-            throw new FormException("Failed to initialize campfire notifier - check your campfire notifier configuration settings: " + e.getMessage(), e, "");
+            String message = "Failed to initialize campfire notifier - check your campfire notifier configuration settings: " + e.getMessage();
+            LOGGER.log(Level.WARNING, message, e);
+            throw new FormException(message, e, "");
         }
     }
 
@@ -88,7 +94,9 @@ public class DescriptorImpl extends BuildStepDescriptor<Publisher> {
         try {
             new CampfireNotifier(subdomain, token, room, hudsonUrl, ssl, smartNotify, sound);
         } catch (Exception e) {
-            throw new FormException("Failed to initialize campfire notifier - check your global campfire notifier configuration settings: " + e.getMessage(), e, "");
+            String message = "Failed to initialize campfire notifier - check your global campfire notifier configuration settings: " + e.getMessage();
+            LOGGER.log(Level.WARNING, message, e);
+            throw new FormException(message, e, "");
         }
         save();
         return super.configure(req, json);
