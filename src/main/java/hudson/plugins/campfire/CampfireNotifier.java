@@ -8,10 +8,7 @@ import hudson.model.Result;
 import hudson.scm.ChangeLogSet;
 import hudson.tasks.BuildStepMonitor;
 import hudson.tasks.Notifier;
-import org.xml.sax.SAXException;
 
-import javax.xml.parsers.ParserConfigurationException;
-import javax.xml.xpath.XPathExpressionException;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
@@ -32,9 +29,9 @@ public class CampfireNotifier extends Notifier {
     // Configured room name should be null unless different from descriptor/global room name
     public String getConfiguredRoomName() {
         if ( DESCRIPTOR.getRoom().equals(room.getName()) ) {
-            return null;   
+            return null;
         } else {
-            return room.getName();  
+            return room.getName();
         }
     }
 
@@ -43,12 +40,12 @@ public class CampfireNotifier extends Notifier {
 
     private static final Logger LOGGER = Logger.getLogger(CampfireNotifier.class.getName());
 
-    public CampfireNotifier() throws IOException {
+    public CampfireNotifier() {
         super();
         initialize();
     }
 
-    public CampfireNotifier(String subdomain, String token, String room, String hudsonUrl, boolean ssl, boolean smartNotify, boolean sound) throws IOException {
+    public CampfireNotifier(String subdomain, String token, String room, String hudsonUrl, boolean ssl, boolean smartNotify, boolean sound) {
         super();
         initialize(subdomain, token, room, hudsonUrl, ssl, smartNotify, sound);
     }
@@ -72,17 +69,8 @@ public class CampfireNotifier extends Notifier {
                 try {
                     // find the sha for the first commit in the changelog file, and then grab the corresponding entry from the changeset, yikes!
                     String changeLogPath = build.getRootDir().toString() + File.separator + "changelog.xml";
-                    String line;
-                    String sha = "";
-                    BufferedReader reader = new BufferedReader(new FileReader(changeLogPath));
-                    while((line = reader.readLine()) != null) {
-                        if (line.matches("^commit [a-zA-Z0-9]+$")) {
-                            sha = line.replace("commit ", "");
-                            break;
-                        }
-                    }
-                    reader.close();
-                    if (sha != "") {
+                    String sha = getCommitHash(changeLogPath);
+                    if (!"".equals(sha)) {
                         Method getIdMethod = entry.getClass().getDeclaredMethod("getId");
                         for(ChangeLogSet.Entry nextEntry : build.getChangeSet()) {
                             if ( ( (String)getIdMethod.invoke(entry) ).compareTo(sha) != 0 ) entry = nextEntry;
@@ -101,7 +89,7 @@ public class CampfireNotifier extends Notifier {
                 }
             }
             String commitMsg = entry.getMsg().trim();
-            if (commitMsg != "") {
+            if (!"".equals(commitMsg)) {
                 if (commitMsg.length() > 47) {
                     commitMsg = commitMsg.substring(0, 46)  + "...";
                 }
@@ -111,14 +99,13 @@ public class CampfireNotifier extends Notifier {
         String resultString = result.toString();
         if (!smartNotify && result == Result.SUCCESS) resultString = resultString.toLowerCase();
         String message = build.getProject().getName() + " " + build.getDisplayName() + " \"" + changeString + "\": " + resultString;
-        String fail_message = build.getProject().getName() + " " + build.getDisplayName() + " \"" + changeString + "\": " + resultString;
         if (hudsonUrl != null && hudsonUrl.length() > 1 && (smartNotify || result != Result.SUCCESS)) {
             message = message + " (" + hudsonUrl + build.getUrl() + ")";
         }
         room.speak(message);
         if (sound) {
-          String message_sound = "";
-          if (resultString == "FAILURE") {
+          String message_sound;
+          if ("FAILURE".equals(resultString)) {
             message_sound = "trombone";
           } else {
             message_sound = "rimshot";
@@ -127,37 +114,35 @@ public class CampfireNotifier extends Notifier {
         }
     }
 
-    private void checkCampfireConnection() throws IOException {
+    private String getCommitHash(String changeLogPath) throws IOException {
+        String sha = "";
+        BufferedReader reader = new BufferedReader(new FileReader(changeLogPath));
+        String line;
+        while((line = reader.readLine()) != null) {
+            if (line.matches("^commit [a-zA-Z0-9]+$")) {
+                sha = line.replace("commit ", "");
+                break;
+            }
+        }
+        reader.close();
+        return sha;
+    }
+
+    private void checkCampfireConnection() {
         if (campfire == null) {
             initialize();
         }
     }
 
-    private void initialize() throws IOException {
+    private void initialize()  {
         initialize(DESCRIPTOR.getSubdomain(), DESCRIPTOR.getToken(), room.getName(), DESCRIPTOR.getHudsonUrl(), DESCRIPTOR.getSsl(), DESCRIPTOR.getSmartNotify(), DESCRIPTOR.getSound());
     }
 
-    private void initialize(String subdomain, String token, String roomName, String hudsonUrl, boolean ssl, boolean smartNotify, boolean sound) throws IOException {
+    private void initialize(String subdomain, String token, String roomName, String hudsonUrl, boolean ssl, boolean smartNotify, boolean sound) {
         campfire = new Campfire(subdomain, token, ssl);
-        String exceptionMsg = "Failed to initialize campfire notifier";
-        try {
-            this.room = campfire.findRoomByName(roomName);
-            if ( this.room == null ) {
-                exceptionMsg = exceptionMsg + ": Room '" + roomName + "' not found - verify name and room permissions";
-                throw new IOException(exceptionMsg);
-            }
-        } catch (IOException e) {
-            LOGGER.log(Level.WARNING, exceptionMsg, e);
-            throw new IOException(exceptionMsg, e);
-        } catch (ParserConfigurationException e) {
-            LOGGER.log(Level.WARNING, exceptionMsg, e);
-            throw new IOException(exceptionMsg, e);
-        } catch (XPathExpressionException e) {
-            LOGGER.log(Level.WARNING, exceptionMsg, e);
-            throw new IOException(exceptionMsg, e);
-        } catch (SAXException e) {
-            LOGGER.log(Level.WARNING, exceptionMsg, e);
-            throw new IOException(exceptionMsg, e);
+        this.room = campfire.findRoomByName(roomName);
+        if ( this.room == null ) {
+            throw new RuntimeException("Room '" + roomName + "' not found - verify name and room permissions");
         }
         this.hudsonUrl = hudsonUrl;
         this.smartNotify = smartNotify;
