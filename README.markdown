@@ -29,6 +29,9 @@ Note: The plugin code is a bit of a mess, partly just because I don't have a
 lot of Java experience, but also because I simply haven't got the time to tidy
 it up. It does work though, and we use it daily without any trouble.
 
+Update: The plugin code is less of a mess that it was, thanks to Dante Briones.
+Yay, thanks Dante, and welcome aboard!
+
 ### Installation
 
 A pre-built hpi file is provided in the downloads area on github. You should be
@@ -38,8 +41,8 @@ the latest development version, you should build from source...
 
 ### Building from source
 
-You'll need to have JDK 6 and maven2 installed to build the plugin from source.
-This should be as simple as asking your package manager to install maven2, e.g.
+You'll need to have JDK 6 and maven installed to build the plugin from source.
+This should be as simple as asking your package manager to install maven, e.g.
 
     brew install maven
 
