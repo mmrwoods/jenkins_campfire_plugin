@@ -31,10 +31,17 @@ it up. It does work though, and we use it daily without any trouble.
 
 ### Installation
 
-You'll need to have JDK 6 and maven2 installed to build the plugin. This should
-be as simple as asking your package manager to install maven2, e.g.
+A pre-built hpi file is provided in the downloads area on github. You should be
+able to upload this to your Jenkins instance via the advanced tab of the plugin
+manager. This build should be based on the latest stable/tagged release. To get
+the latest development version, you should build from source...
 
-    sudo port install maven2
+### Building from source
+
+You'll need to have JDK 6 and maven2 installed to build the plugin from source.
+This should be as simple as asking your package manager to install maven2, e.g.
+
+    brew install maven
 
 Then clone the repository and build the package
 
