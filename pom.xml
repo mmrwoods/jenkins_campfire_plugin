@@ -10,7 +10,7 @@
   <groupId>org.jvnet.hudson.plugins</groupId>
   <artifactId>campfire</artifactId>
   <packaging>hpi</packaging>
-  <version>2.4.1</version>
+  <version>2.4.2</version>
   <name>Jenkins Campfire Plugin</name>
   <description>A build status notifier that sends notifications to Campfire rooms</description>
   <url>http://wiki.jenkins-ci.org/display/JENKINS/Campfire+Plugin</url>
@@ -49,15 +49,27 @@
     <developer>
       <id>jkrall</id>
       <name>Joshua Krall</name>
+      <url>https://github.com/jkrall</url>
     </developer>
     <developer>
       <id>bgreenlee</id>
       <name>Brad Greenlee</name>
+      <url>https://github.com/bgreenlee</url>
     </developer>
     <developer>
       <id>hpoydar</id>
       <name>Henry Poydar</name>
       <url>https://github.com/hpoydar</url>
+    </developer>
+    <developer>
+      <id>mortice</id>
+      <name>Tom Stuart</name>
+      <url>https://github.com/mortice</url>
+    </developer>
+    <developer>
+      <id>dbriones</id>
+      <name>Dante Briones</name>
+      <url>https://github.com/dbriones</url>
     </developer>
   </developers>
 </project>
