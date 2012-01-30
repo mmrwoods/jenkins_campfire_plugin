@@ -1,5 +1,12 @@
 ## Campfire notifier plugin for Jenkins
 
+---
+
+**UPDATE:** This fork has merged back to the offical Jenkins repository at
+[https://github.com/jenkinsci/campfire-plugin](https://github.com/jenkinsci/campfire-plugin).
+
+---
+
 This is a fork of the plugin developed by Jens Lukowski. More information about
 the original plugin is available from the [Hudson
 wiki](http://wiki.hudson-ci.org/display/HUDSON/Campfire+Plugin) and [this blog
